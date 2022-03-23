@@ -2,7 +2,7 @@ import React, {Fragment, useEffect, useState} from 'react';
 import { Link } from "react-router-dom";
 import { isAuthenticated } from "../auth";
 import Layout from "../core/Layout";
-import {createProduct } from './apiAdmin';
+import {createProduct, getCategories } from './apiAdmin';
 
 
 const AddProduct = () => {
@@ -38,23 +38,33 @@ const AddProduct = () => {
         formData,
     } = values;
 
+    // load categories and set form data
+    const init = () => {
+        const data = getCategories();
+        if(data.error) { 
+            setValues({...values, error: data.error })
+        } else {
+            setValues({...values, categoies:data})
+        }
+
+    }
+
+
     useEffect(() => {
-        setValues({...values, formData: new FormData()})
+        setValues({...values, formData: new FormData() })
     }, [])
 
     const handleChange = name => event => {
         const value = name === 'photo' ? event.target.files[0] : event.target.value;
         formData.set(name, value);
         setValues({...values, [name]: value });
-
     }
 
     const clickSubmit = async(event) => {
         event.preventDefault();
         setValues({...values, error:'', loading:true });
-        console.log(formData);
+        
         const data = await createProduct(user._id, token, formData);
-
         if(data.error) {
             setValues({...values, error:data.error });
         } else {
@@ -106,7 +116,6 @@ const AddProduct = () => {
 
                 <button className='btn btn-outline-primary' style={{'marginTop':'10px'}}>Create Product</button>
             </form>
-
         )
     }
 
