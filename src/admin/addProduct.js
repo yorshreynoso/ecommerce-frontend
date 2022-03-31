@@ -39,19 +39,17 @@ const AddProduct = () => {
     } = values;
 
     // load categories and set form data
-    const init = () => {
-        const data = getCategories();
+    const init = async() => {
+        const data = await getCategories();
         if(data.error) { 
             setValues({...values, error: data.error })
         } else {
-            setValues({...values, categoies:data})
+            setValues({...values, categories:data, formData: new FormData() })
         }
-
     }
 
-
     useEffect(() => {
-        setValues({...values, formData: new FormData() })
+        init();
     }, [])
 
     const handleChange = name => event => {
@@ -97,13 +95,17 @@ const AddProduct = () => {
 
                 <div className="form-group">
                     <label className='text-muted'>Category </label>
-                    <select onChange={handleChange('category')}  className='form-control'><option value='62337f0289c0a9b92be30454'>php</option>
-                    <option value='62337f0289c0a9b92be30454'>phptest</option></select>
+                    <select onChange={handleChange('category')}  className='form-control'>
+                        <option>Please Select</option>
+                        {categories && categories.map((category, index) => ( <option key={index} value={category._id}>{category.name} </option> ))}
+                        
+                    </select>
                 </div>
 
                 <div className="form-group">
                     <label className='text-muted'>Shipping</label>
-                    <select onChange={handleChange('shipping')}  className='form-control'>
+                    <select onChange={ handleChange('shipping') }  className='form-control'>
+                        <option>Please Select</option>
                         <option value='0'>No</option>
                         <option value='1'>Yes</option>
                     </select>
@@ -119,12 +121,36 @@ const AddProduct = () => {
         )
     }
 
+    const showError = () => {
+        return(
+            <div className='alert alert-danger' style={{display:error ? '' : 'none'}}>
+                {error}
+            </div>
+        )
+    }
+
+    const showSuccess = () => {
+        return(
+            <div className='alert alert-info' style={{display:createdProduct ? '' : 'none'}}>
+                <h2>{createdProduct} is created</h2>
+
+            </div>
+        )
+    }
+
+    const showLoading = () => {
+        loading && (<div className='alert.alert-success'>Loading...</div>)
+    }
+
     return(
         
         <Layout title="Add new product" description={`Hello ${user.name}, add a new product`}>
         <div className="row">
             <div className="col-md-8 offset-md-2">
             <h1>hello</h1>
+            {showLoading()}
+            {showSuccess()}
+            {showError()}
             {newPostForm()}
             </div>
         </div>

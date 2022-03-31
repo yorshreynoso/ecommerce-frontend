@@ -1,8 +1,7 @@
-import React, {Fragment, useEffect, useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import Layout from './Layout';
 import {getProducts} from './apiCore';
-import axios, * as others from 'axios';
-
+import Card from './Card';
 
 
 const Home = () => {
@@ -13,10 +12,8 @@ const Home = () => {
     const loadProductsBySell = async() => {
         try {
             const data = await getProducts('sold');
-            console.log(data);
-            setProductsBySell(data);
-
-            
+            setProductsBySell(data.products);
+  
         } catch (error) {
             console.log(error);
             setError(error);
@@ -26,12 +23,11 @@ const Home = () => {
     const loadProductsByArrival = async() => {
         try {
             const data = await getProducts('createdAt');
-            console.log(data);
-            setProductsByArrival(data);
+            setProductsByArrival(data.products);
             
             
         } catch (error) {
-            console.log(error);
+            console.log('Error setting loadProductsByArrival', error);
             setError(error);
         }
     }
@@ -42,10 +38,24 @@ const Home = () => {
     }, [])
 
     return(
-        <Layout title ="Home Page" description = "Node React E-comerce App">
-            <p>{JSON.stringify(productByArrival)}</p>
+        <Layout title ="Home Page" description = "Node React E-comerce App" className='container-fluid'>
+            {/* <p>{JSON.stringify(productByArrival)}</p>
             <hr></hr>
-            <p>{JSON.stringify(productBySell)}</p>
+            <p>{JSON.stringify(productBySell)}</p> */}
+     
+            <h2 className='mb-4'>New Arrivals</h2>
+            <div className='row'>
+                {productByArrival.map((product, index) => ( 
+                    <Card key={index} product={product} /> 
+                ))}
+            </div>
+
+                <h2 className='mb-4'>Best Sellers</h2>
+            <div className='row'>
+                {productBySell.map((product, index) => ( 
+                    <Card key={index} product={product} /> 
+                ))}
+            </div>
             
         </Layout>
     );

@@ -47,34 +47,11 @@ export const createProduct = async(userId, token, product) => { // REGISTER
     }
 }
 
-// export const createProduct = (userId, token, product) => {
-//     console.log(token);
-//     return fetch(`${API}/product/create/${userId}`, {
-//         method:"POST",
-//         headers: {
-//             'Authorization':`Bearer ${token}`,
-//             mode:'no-cors', 
-//             'Access-Control-Allow-Origin': '*',
-//             Accept:'application/json',
-//         },
-//         body: product
-//     })
-//     .then(response => {
-//         console.log(response);
-//         return response.json();
-//     })
-//     .catch(err => {
-//         console.log(err);
-//     })
-   
-// }
-
-//TODO validate if it's working
 export const getCategories = async() => {
-
     try {
         const res = await axios.get(`${API}/categories`);
         return res.data;
+
     } catch (error) {
         return error.response.data;
     } 

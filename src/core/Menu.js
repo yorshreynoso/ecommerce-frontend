@@ -23,6 +23,9 @@ const Menu = ({history}) => {
                 <li className="nav-item">
                     <Link className="nav-link" style={isActive(history, '/')} to='/'> HOME</Link>
                 </li>
+                <li className="nav-item">
+                    <Link className="nav-link" style={isActive(history, '/shop')} to='/shop'> SHOP</Link>
+                </li>
                 
                 {isAuthenticated() && isAuthenticated().user.role === 0 && (
                     <li className="nav-item">
@@ -32,7 +35,7 @@ const Menu = ({history}) => {
 
                 {isAuthenticated() && isAuthenticated().user.role === 1 && (
                     <li className="nav-item">
-                        <Link className="nav-link" style={isActive(history, '/admin/dashboard')} to='/dashboard'> DASHBOARD</Link>
+                        <Link className="nav-link" style={isActive(history, '/admin/dashboard')} to='/admin/dashboard'> DASHBOARD</Link>
                     </li>
                 )}
 
